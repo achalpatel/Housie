@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Housie</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
 </resources>
