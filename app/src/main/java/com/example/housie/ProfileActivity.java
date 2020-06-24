@@ -22,40 +22,38 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class SignUpActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private FirebaseUser currentUser;
-    private static final String TAG = "Achal-Signup";
+    private static final String TAG = "Achal-Profile";
     private EditText nameText;
     private EditText emailText;
-    private EditText passwordText;
-    private Button submit_btn;
+    private Button update_btn;
+    private Button back_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_profile);
         nameText = findViewById(R.id.id_name);
         emailText = findViewById(R.id.id_email);
-        passwordText = findViewById(R.id.id_password);
-        submit_btn = findViewById(R.id.btn_submit);
+        update_btn = findViewById(R.id.btn_update);
+        back_btn = findViewById(R.id.btn_back);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null) {
-            Toast.makeText(this, "Signed:" + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
-            emailText.setText(currentUser.getEmail());
-            passwordText.setVisibility(View.GONE);
-            if (currentUser.getDisplayName() != null) {
+            if (currentUser.getDisplayName() != null && currentUser.getEmail() != null) {
                 nameText.setText(currentUser.getDisplayName());
+                emailText.setText(currentUser.getEmail());
             }
             ValueEventListener userListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     User user = snapshot.child("users").child(currentUser.getUid()).getValue(User.class);
-                    if(user!=null){
+                    if (user != null) {
                         Log.d(TAG, "onDataChange: Username:" + user.getName());
                     }
                 }
@@ -69,38 +67,28 @@ public class SignUpActivity extends AppCompatActivity {
 
         }
         Log.d(TAG, "onStart: " + currentUser);
-        submit_btn.setOnClickListener(new View.OnClickListener() {
+        update_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitClick();
+                updateClick();
             }
         });
 
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
-    protected void submitClick() {
+    protected void updateClick() {
         if (nameText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please Enter the Name", Toast.LENGTH_SHORT).show();
-        } else if (currentUser != null) {
+        } else{
             this.updateProfile();
-        } else {
-            mAuth.createUserWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "onComplete: User Signed Up successfully");
-                                Toast.makeText(SignUpActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                                updateProfile();
-                            } else {
-                                Log.e(TAG, "onComplete: Sign up failed", task.getException());
-                                Toast.makeText(SignUpActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
         }
     }
-
     public void updateProfile() {
         UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                 .setDisplayName(nameText.getText().toString())
@@ -109,7 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(SignUpActivity.this, "Name Updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "Name Updated", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onComplete: Name Updated to " + currentUser.getDisplayName());
                     User user = new User(nameText.getText().toString(), emailText.getText().toString());
                     mDatabase.child("users").child(currentUser.getUid()).setValue(user);
@@ -118,5 +106,4 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
-
 }

@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SignUpActivity">
+    tools:context=".ProfileActivity">
 
     <EditText
         android:id="@+id/id_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="35dp"
         android:autofillHints="false"
         android:hint="@string/name"
         android:textAlignment="center" />
@@ -27,23 +27,18 @@
         android:hint="@string/email"
         android:textAlignment="center" />
 
-    <EditText
-        android:id="@+id/id_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
-        android:autofillHints="false"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:textAlignment="center" />
-
     <Button
-        android:id="@+id/btn_submit"
+        android:id="@+id/btn_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="@string/submit" />
+        android:text="@string/update" />
 
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/back" />
 
 </LinearLayout>

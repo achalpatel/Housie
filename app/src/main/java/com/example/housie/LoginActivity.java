@@ -3,6 +3,7 @@ package com.example.housie;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordTextView;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "Achal-LoginActivity";
     private FirebaseUser currentUser;
 
     @Override
@@ -56,7 +57,8 @@ public class LoginActivity extends AppCompatActivity {
                     if(task.isSuccessful()){
                         Log.d(TAG, "onComplete: Logged in successfully");
                         Toast.makeText(LoginActivity.this, "Welcome User", Toast.LENGTH_SHORT).show();
-                        finish();
+                        Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
+                        startActivity(intent);
                     }else if(task.isCanceled()){
                         Log.w(TAG, "onComplete: Incorrect credentials", task.getException());
                         Toast.makeText(LoginActivity.this, "Incorrect Credentials", Toast.LENGTH_SHORT).show();

@@ -7,4 +7,10 @@
     <string name="name">Name</string>
     <string name="submit">Submit</string>
     <string name="signout">Sign out</string>
+    <string name="profile">Profile</string>
+    <string name="friends">Friends</string>
+    <string name="joinroom">Join Room</string>
+    <string name="createroom">Create Room</string>
+    <string name="update">Update</string>
+    <string name="back">Back</string>
 </resources>
