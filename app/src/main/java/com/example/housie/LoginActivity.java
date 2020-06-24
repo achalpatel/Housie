@@ -47,25 +47,26 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-    protected void loginButton(){
+
+    protected void loginButton() {
         String email = emailTextView.getText().toString();
         String password = passwordTextView.getText().toString();
-        if(!email.isEmpty() && !password.isEmpty()){
-            mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        if (!email.isEmpty() && !password.isEmpty()) {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Log.d(TAG, "onComplete: Logged in successfully");
                         Toast.makeText(LoginActivity.this, "Welcome User", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
                         startActivity(intent);
-                    }else if(task.isCanceled()){
+                    } else if (task.isCanceled()) {
                         Log.w(TAG, "onComplete: Incorrect credentials", task.getException());
                         Toast.makeText(LoginActivity.this, "Incorrect Credentials", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-        }else{
+        } else {
             Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
         }
     }

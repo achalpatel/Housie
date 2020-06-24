@@ -66,7 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
             mDatabase.addValueEventListener(userListener);
 
         }
-        Log.d(TAG, "onStart: " + currentUser);
+        Log.d(TAG, "onStart: " + currentUser.getEmail());
         update_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,10 +85,11 @@ public class ProfileActivity extends AppCompatActivity {
     protected void updateClick() {
         if (nameText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please Enter the Name", Toast.LENGTH_SHORT).show();
-        } else{
+        } else {
             this.updateProfile();
         }
     }
+
     public void updateProfile() {
         UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                 .setDisplayName(nameText.getText().toString())

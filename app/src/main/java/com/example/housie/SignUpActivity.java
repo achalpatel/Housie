@@ -44,35 +44,13 @@ public class SignUpActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         currentUser = mAuth.getCurrentUser();
 
-        if (currentUser != null) {
-            Toast.makeText(this, "Signed:" + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
-            emailText.setText(currentUser.getEmail());
-            passwordText.setVisibility(View.GONE);
-            if (currentUser.getDisplayName() != null) {
-                nameText.setText(currentUser.getDisplayName());
-            }
-            ValueEventListener userListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    User user = snapshot.child("users").child(currentUser.getUid()).getValue(User.class);
-                    if(user!=null){
-                        Log.d(TAG, "onDataChange: Username:" + user.getName());
-                    }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e(TAG, "onCancelled: Could not find User", error.toException());
-                }
-            };
-            mDatabase.addValueEventListener(userListener);
-
-        }
-        Log.d(TAG, "onStart: " + currentUser);
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitClick();
+                if (currentUser == null) {
+                    submitClick();
+                }
             }
         });
 
@@ -81,8 +59,6 @@ public class SignUpActivity extends AppCompatActivity {
     protected void submitClick() {
         if (nameText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please Enter the Name", Toast.LENGTH_SHORT).show();
-        } else if (currentUser != null) {
-            this.updateProfile();
         } else {
             mAuth.createUserWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -91,6 +67,7 @@ public class SignUpActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, "onComplete: User Signed Up successfully");
                                 Toast.makeText(SignUpActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                currentUser = mAuth.getCurrentUser();
                                 updateProfile();
                             } else {
                                 Log.e(TAG, "onComplete: Sign up failed", task.getException());

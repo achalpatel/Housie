@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void checkIfLoggedIn(){
-        if(currentUser!=null){
+    public void checkIfLoggedIn() {
+        if (currentUser != null) {
             Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
             startActivity(intent);
         }
