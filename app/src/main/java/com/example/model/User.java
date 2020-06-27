@@ -15,6 +15,7 @@ public class User {
     public Map<String, Boolean> friendRequestList;
     public Map<String, Boolean> roomsOwned;
     public Map<String, Boolean> roomsHost;
+    public String currentRoom;
 
 
     //Constructors
@@ -56,6 +57,9 @@ public class User {
         return roomsHost;
     }
 
+    public String getCurrentRoom() {
+        return currentRoom;
+    }
 
     //Setters
     public void setUserId(String userId) {
@@ -78,7 +82,9 @@ public class User {
         this.friendRequestList = friendRequestList;
     }
 
-
+    public void setCurrentRoom(String currentRoom) {
+        this.currentRoom = currentRoom;
+    }
 
     //Methods
 
@@ -90,11 +96,11 @@ public class User {
         this.friendRequestList.put(userId, true);
     }
 
-    public void addToRoomsOwned(String roomId){
+    public void addToRoomsOwned(String roomId) {
         this.roomsOwned.put(roomId, true);
     }
 
-    public void addToRoomsHost(String roomId){
+    public void addToRoomsHost(String roomId) {
         this.roomsHost.put(roomId, true);
     }
 
