@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -43,7 +43,6 @@ public class ProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         currentUser = mAuth.getCurrentUser();
-
         if (currentUser != null) {
             if (currentUser.getDisplayName() != null && currentUser.getEmail() != null) {
                 nameText.setText(currentUser.getDisplayName());
@@ -66,20 +65,19 @@ public class ProfileActivity extends AppCompatActivity {
             mDatabase.addValueEventListener(userListener);
 
         }
-        Log.d(TAG, "onStart: " + currentUser.getEmail());
         update_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateClick();
             }
         });
-
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
     }
 
     protected void updateClick() {
