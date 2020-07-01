@@ -31,6 +31,8 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText emailText;
     private Button update_btn;
     private Button back_btn;
+    private String oriName;
+    private String oriEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,7 +1,11 @@
 package com.example.model;
 
+import android.os.Build;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @IgnoreExtraProperties
@@ -15,7 +19,10 @@ public class Room {
     public long roomSize;
     public long maxRoomSize;
     public boolean isLocked;
-    public Map<String, Boolean> roomUsers;
+    public Map<String, Boolean> roomUsers = new HashMap<>();
+    public Date roomCreateDate;
+    public Date roomCloseDate;
+
 
 
     //Constructors

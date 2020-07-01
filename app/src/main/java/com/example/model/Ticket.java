@@ -1,5 +1,6 @@
 package com.example.model;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
@@ -14,10 +15,12 @@ public class Ticket {
     public long rows;
     public long cols;
     public long pointsClaimed;
-    public List<List<Long>> ticketData;
-    public List<List<Boolean>> checkedData;
-    public List<Long> ticketNumbers;
+    public List<List<Long>> ticketData = new ArrayList<>();
+    public List<List<Boolean>> checkedData = new ArrayList<>();
     public static final long ticketNumberRange = 100;
+    @Exclude
+    public List<Long> ticketNumbers = new ArrayList<>((int)ticketNumberRange);
+
 
     //Constructors
     public Ticket() {
@@ -27,8 +30,6 @@ public class Ticket {
         this.rows = rows;
         this.cols = cols;
         this.ofGame = game;
-        this.ticketData = new ArrayList<>();
-        this.checkedData = new ArrayList<>();
         this.checkedDataInit();
         this.fillTickNumbers();
         this.generateTicketData();

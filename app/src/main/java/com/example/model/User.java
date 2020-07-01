@@ -2,7 +2,7 @@ package com.example.model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -11,11 +11,13 @@ public class User {
     public String userId;
     public String name;
     public String email;
-    public Map<String, Boolean> friendsList;
-    public Map<String, Boolean> friendRequestList;
-    public Map<String, Boolean> roomsOwned;
-    public Map<String, Boolean> roomsHost;
+    public Map<String, Boolean> friendsList = new HashMap<>();
+    public Map<String, Boolean> friendRequestList = new HashMap<>();
+    public Map<String, Boolean> roomsOwned = new HashMap<>();
+    public Map<String, Boolean> roomsHost = new HashMap<>();
     public String currentRoom;
+    public Map<String, Boolean> gamesWon = new HashMap<>();
+    public Boolean isActive;
 
 
     //Constructors
@@ -61,6 +63,10 @@ public class User {
         return currentRoom;
     }
 
+    public Boolean isActive() {
+        return isActive;
+    }
+
     //Setters
     public void setUserId(String userId) {
         this.userId = userId;
@@ -84,6 +90,10 @@ public class User {
 
     public void setCurrentRoom(String currentRoom) {
         this.currentRoom = currentRoom;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
     //Methods

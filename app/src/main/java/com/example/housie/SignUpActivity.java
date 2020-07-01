@@ -87,6 +87,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this, "Name Updated", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onComplete: Name Updated to " + currentUser.getDisplayName());
                     User user = new User(nameText.getText().toString(), emailText.getText().toString());
+                    user.setUserId(currentUser.getUid());
                     mDatabase.child("users").child(currentUser.getUid()).setValue(user);
                     finish();
                 }
