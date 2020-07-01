@@ -1,7 +1,6 @@
 package com.example.housie;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,12 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.model.User;
+import com.example.model.UserProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class HomePageActivity extends AppCompatActivity {
@@ -37,7 +34,7 @@ public class HomePageActivity extends AppCompatActivity {
     private Button signout_btn;
     private static final String TAG = "Achal-Homepage";
     private boolean status;
-    private User userLocal;
+    private UserProfile userProfileLocal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,20 +51,19 @@ public class HomePageActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         //User eventListener
-        mDatabase.child("users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d(TAG, "onDataChange: snap: "+snapshot.getKey());
-                userLocal = snapshot.getValue(User.class);
-                Log.d(TAG, "onDataChange: userLocal: "+userLocal.getName());
-                onLoginUpdate();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "onCancelled: Database error: ", error.toException());
-            }
-        });
+//        mDatabase.child("users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                userProfileLocal = snapshot.getValue(UserProfile.class);
+////                Log.d(TAG, "onDataChange: userLocal: "+userProfileLocal.getName());
+//                onLoginUpdate();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.e(TAG, "onCancelled: Database error: ", error.toException());
+//            }
+//        });
 
 
         //Profile Button Event Listener
@@ -84,10 +80,10 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
-                userLocal.setActive(false);
-                Map<String, Object> updatechild = new HashMap<>();
-                updatechild.put("isActive",false);
-                mDatabase.child("users").child(currentUser.getUid()).updateChildren(updatechild);
+//                userProfileLocal.setIsActive(false);
+//                Map<String, Object> updatechild = new HashMap<>();
+//                updatechild.put("isActive",false);
+//                mDatabase.child("users").child(currentUser.getUid()).updateChildren(updatechild);
                 Intent intent = new Intent(HomePageActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -97,12 +93,12 @@ public class HomePageActivity extends AppCompatActivity {
     public void onLoginUpdate(){
         Map<String,Object> setStatus = new HashMap<>();
         setStatus.put("isActive",true);
-        mDatabase.child("users").child(userLocal.getUserId()).updateChildren(setStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mDatabase.child("users").child(userProfileLocal.getUserId()).updateChildren(setStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    userLocal.setActive(true);
-                    Log.d(TAG, "onComplete: Active:"+userLocal.isActive());
+                    userProfileLocal.setIsActive(true);
+                    Log.d(TAG, "onComplete: Active:"+userProfileLocal.getIsActive());
                 }else{
                     Log.d(TAG, "onComplete: status change failed");
                 }

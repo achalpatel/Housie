@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.model.User;
+import com.example.model.UserProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,10 +53,10 @@ public class ProfileActivity extends AppCompatActivity {
             ValueEventListener userListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    User user = snapshot.child("users").child(currentUser.getUid()).getValue(User.class);
-                    if (user != null) {
-                        Log.d(TAG, "onDataChange: Username:" + user.getName());
-                    }
+//                    UserProfile user = snapshot.child("users").child(currentUser.getUid()).getValue(User.class);
+//                    if (user != null) {
+//                        Log.d(TAG, "onDataChange: Username:" + user.getName());
+//                    }
                 }
 
                 @Override
@@ -100,8 +100,8 @@ public class ProfileActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(ProfileActivity.this, "Name Updated", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onComplete: Name Updated to " + currentUser.getDisplayName());
-                    User user = new User(nameText.getText().toString(), emailText.getText().toString());
-                    mDatabase.child("users").child(currentUser.getUid()).setValue(user);
+//                    User user = new User(nameText.getText().toString(), emailText.getText().toString());
+//                    mDatabase.child("users").child(currentUser.getUid()).setValue(user);
                     finish();
                 }
             }

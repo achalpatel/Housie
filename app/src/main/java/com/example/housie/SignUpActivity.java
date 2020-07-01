@@ -10,7 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.model.User;
+import com.example.model.UserFriends;
+import com.example.model.UserGames;
+import com.example.model.UserProfile;
+import com.example.model.UserRooms;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -19,6 +22,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -86,9 +92,20 @@ public class SignUpActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(SignUpActivity.this, "Name Updated", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onComplete: Name Updated to " + currentUser.getDisplayName());
-                    User user = new User(nameText.getText().toString(), emailText.getText().toString());
-                    user.setUserId(currentUser.getUid());
-                    mDatabase.child("users").child(currentUser.getUid()).setValue(user);
+                    String uId = currentUser.getUid();
+                    UserProfile userProfile = new UserProfile(uId, nameText.getText().toString(), emailText.getText().toString());
+                    UserFriends userFriends = new UserFriends(uId);
+                    UserRooms userRooms = new UserRooms(uId);
+                    UserGames userGames = new UserGames(uId);
+                    Map<String, Object> userMap = new HashMap<>();
+                    userMap.put("userProfile/"+uId,userProfile);
+                    userMap.put("userFriends/"+uId,userFriends);
+                    userMap.put("userRooms/"+uId,userRooms);
+                    userMap.put("userGames/"+uId,userGames);
+                    mDatabase.child("users").updateChildren(userMap);
+//                    User user = new User(nameText.getText().toString(), emailText.getText().toString());
+//                    user.setUserId(currentUser.getUid());
+//                    mDatabase.child("users").child(currentUser.getUid()).setValue(user);
                     finish();
                 }
             }
