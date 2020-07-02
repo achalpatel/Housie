@@ -1,12 +1,10 @@
 package com.example.model;
 
-import android.os.Build;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @IgnoreExtraProperties
 public class Room {
@@ -19,24 +17,21 @@ public class Room {
     public long roomSize;
     public long maxRoomSize;
     public boolean isLocked;
-    public Map<String, Boolean> roomUsers = new HashMap<>();
     public Date roomCreateDate;
     public Date roomCloseDate;
 
-
-
     //Constructors
     public Room() {
-        this.isOpen=true;
-        this.isLocked=false;
+        this.isOpen = true;
+        this.isLocked = false;
     }
 
     public Room(String roomId, String roomName, String roomOwner) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.roomOwner = roomOwner;
-        this.isOpen=true;
-        this.isLocked=false;
+        this.isOpen = true;
+        this.isLocked = false;
     }
 
     public Room(String roomId, String roomName, String roomOwner, String roomPassword) {
@@ -44,8 +39,8 @@ public class Room {
         this.roomName = roomName;
         this.roomOwner = roomOwner;
         this.roomPassword = roomPassword;
-        this.isOpen=false;
-        this.isLocked=false;
+        this.isOpen = false;
+        this.isLocked = false;
     }
 
     //Getters
@@ -80,10 +75,6 @@ public class Room {
 
     public long getMaxRoomSize() {
         return maxRoomSize;
-    }
-
-    public Map<String, Boolean> getRoomUsers() {
-        return roomUsers;
     }
 
 
@@ -125,15 +116,4 @@ public class Room {
         this.maxRoomSize = maxRoomSize;
     }
 
-
-    //Methods
-
-    public void addRoomUser(String uid){
-        this.roomUsers.put(uid, true);
-        this.roomSize++;
-    }
-
-    public Boolean leaveRoom(String uid){
-        return this.roomUsers.remove(uid);
-    }
 }

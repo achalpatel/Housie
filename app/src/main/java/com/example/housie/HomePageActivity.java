@@ -51,19 +51,19 @@ public class HomePageActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         //User eventListener
-//        mDatabase.child("users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                userProfileLocal = snapshot.getValue(UserProfile.class);
-////                Log.d(TAG, "onDataChange: userLocal: "+userProfileLocal.getName());
-//                onLoginUpdate();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.e(TAG, "onCancelled: Database error: ", error.toException());
-//            }
-//        });
+        mDatabase.child("users/userProfile").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userProfileLocal = snapshot.getValue(UserProfile.class);
+                Log.d(TAG, "onDataChange: userLocal: "+userProfileLocal);
+                onLoginUpdate();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "onCancelled: Database error: ", error.toException());
+            }
+        });
 
 
         //Profile Button Event Listener
@@ -80,10 +80,10 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
-//                userProfileLocal.setIsActive(false);
-//                Map<String, Object> updatechild = new HashMap<>();
-//                updatechild.put("isActive",false);
-//                mDatabase.child("users").child(currentUser.getUid()).updateChildren(updatechild);
+                userProfileLocal.setIsActive(false);
+                Map<String, Object> updatechild = new HashMap<>();
+                updatechild.put("isActive",false);
+                mDatabase.child("users/userProfile").child(currentUser.getUid()).updateChildren(updatechild);
                 Intent intent = new Intent(HomePageActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -93,7 +93,7 @@ public class HomePageActivity extends AppCompatActivity {
     public void onLoginUpdate(){
         Map<String,Object> setStatus = new HashMap<>();
         setStatus.put("isActive",true);
-        mDatabase.child("users").child(userProfileLocal.getUserId()).updateChildren(setStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mDatabase.child("users/userProfile").child(userProfileLocal.getUserId()).updateChildren(setStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){

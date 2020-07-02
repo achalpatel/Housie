@@ -3,9 +3,8 @@ package com.example.model;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @IgnoreExtraProperties
 public class Ticket {
@@ -15,24 +14,18 @@ public class Ticket {
     public long rows;
     public long cols;
     public long pointsClaimed;
-    public List<List<Long>> ticketData = new ArrayList<>();
-    public List<List<Boolean>> checkedData = new ArrayList<>();
     public static final long ticketNumberRange = 100;
-    @Exclude
-    public List<Long> ticketNumbers = new ArrayList<>((int)ticketNumberRange);
-
+    public Map<String, Boolean> rules = new HashMap<>();
 
     //Constructors
     public Ticket() {
     }
 
-    public Ticket(long rows, long cols, String game) {
+    public Ticket(String ticketId, long rows, long cols, String game) {
+        this.ticketId = ticketId;
         this.rows = rows;
         this.cols = cols;
         this.ofGame = game;
-        this.checkedDataInit();
-        this.fillTickNumbers();
-        this.generateTicketData();
     }
 
     //Getters
@@ -45,7 +38,7 @@ public class Ticket {
         return ticketOwner;
     }
 
-    public String getGame() {
+    public String getOfGame() {
         return ofGame;
     }
 
@@ -61,13 +54,14 @@ public class Ticket {
         return pointsClaimed;
     }
 
-    public List<List<Long>> getTicketData() {
-        return ticketData;
+    public static long getTicketNumberRange() {
+        return ticketNumberRange;
     }
 
-    public List<List<Boolean>> getCheckedData() {
-        return checkedData;
+    public Map<String, Boolean> getRules() {
+        return rules;
     }
+
 
     //Setters
 
@@ -96,37 +90,21 @@ public class Ticket {
         this.pointsClaimed = pointsClaimed;
     }
 
+    public void setRules(Map<String, Boolean> rules) {
+        this.rules = rules;
+    }
+
     //Methods
-    public void checkData(int i, int j) {
-        if (!this.checkedData.get(i).get(j)) {
-            this.checkedData.get(i).set(j, true);
-        }
+    @Exclude
+    public void addRule(String rule){
+        this.rules.put(rule, true);
     }
-
-    public void checkedDataInit() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                this.checkedData.get(i).set(j, false);
-            }
-        }
+    @Exclude
+    public boolean checkRule(String rule){
+        return this.rules.containsKey(rule);
     }
-
-    public void fillTickNumbers() {
-        for (long i = 1; i <= ticketNumberRange; i++) {
-            this.ticketNumbers.add(i);
-        }
+    @Exclude
+    public boolean removeRule(String rule){
+        return this.rules.containsKey(rule) && this.rules.remove(rule)!=null;
     }
-
-    public void generateTicketData() {
-        for (int i = 0; i < this.rows; i++) {
-            List<Long> addRow = new ArrayList<>((int) this.cols);
-            this.ticketData.add(addRow);
-            for (int j = 0; j < this.cols; j++) {
-                Collections.shuffle(this.ticketNumbers);
-                long value = this.ticketNumbers.remove(0);
-                addRow.add(value);
-            }
-        }
-    }
-
 }
