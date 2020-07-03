@@ -48,14 +48,14 @@ public class HomePageActivity extends AppCompatActivity {
         signout_btn = findViewById(R.id.btn_signout);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
+        if (currentUser != null) {
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("users/userProfile").child(currentUser.getUid());
+        }
         //User eventListener
-        mDatabase.child("users/userProfile").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userProfileLocal = snapshot.getValue(UserProfile.class);
-                Log.d(TAG, "onDataChange: userLocal: "+userProfileLocal);
                 onLoginUpdate();
             }
 
@@ -81,30 +81,16 @@ public class HomePageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 userProfileLocal.setIsActive(false);
-                Map<String, Object> updatechild = new HashMap<>();
-                updatechild.put("isActive",false);
-                mDatabase.child("users/userProfile").child(currentUser.getUid()).updateChildren(updatechild);
+                mDatabase.setValue(userProfileLocal);
                 Intent intent = new Intent(HomePageActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
 
     }
-    public void onLoginUpdate(){
-        Map<String,Object> setStatus = new HashMap<>();
-        setStatus.put("isActive",true);
-        mDatabase.child("users/userProfile").child(userProfileLocal.getUserId()).updateChildren(setStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    userProfileLocal.setIsActive(true);
-                    Log.d(TAG, "onComplete: Active:"+userProfileLocal.getIsActive());
-                }else{
-                    Log.d(TAG, "onComplete: status change failed");
-                }
-            }
-        });
+
+    public void onLoginUpdate() {
+        userProfileLocal.setIsActive(true);
+        mDatabase.setValue(userProfileLocal);
     }
-
-
 }

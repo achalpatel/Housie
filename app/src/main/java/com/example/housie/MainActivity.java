@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         checkIfLoggedIn();
-        Log.d(TAG, "onCreate: Login button visibility: "+login_btn.getVisibility());
+        Log.d(TAG, "onCreate: Login button visibility: " + login_btn.getVisibility());
 
 
         login_btn.setOnClickListener(new View.OnClickListener() {

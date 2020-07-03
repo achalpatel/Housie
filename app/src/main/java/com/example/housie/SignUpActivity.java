@@ -86,26 +86,24 @@ public class SignUpActivity extends AppCompatActivity {
         UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                 .setDisplayName(nameText.getText().toString())
                 .build();
+
         currentUser.updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(SignUpActivity.this, "Name Updated", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onComplete: Name Updated to " + currentUser.getDisplayName());
+                    Log.d(TAG, "onComplete: Name: " + currentUser.getDisplayName());
                     String uId = currentUser.getUid();
                     UserProfile userProfile = new UserProfile(uId, nameText.getText().toString(), emailText.getText().toString());
                     UserFriends userFriends = new UserFriends(uId);
                     UserRooms userRooms = new UserRooms(uId);
                     UserGames userGames = new UserGames(uId);
                     Map<String, Object> userMap = new HashMap<>();
-                    userMap.put("userProfile/"+uId,userProfile);
-                    userMap.put("userFriends/"+uId,userFriends);
-                    userMap.put("userRooms/"+uId,userRooms);
-                    userMap.put("userGames/"+uId,userGames);
+                    userMap.put("userProfile/" + uId, userProfile);
+                    userMap.put("userFriends/" + uId, userFriends);
+                    userMap.put("userRooms/" + uId, userRooms);
+                    userMap.put("userGames/" + uId, userGames);
                     mDatabase.child("users").updateChildren(userMap);
-//                    User user = new User(nameText.getText().toString(), emailText.getText().toString());
-//                    user.setUserId(currentUser.getUid());
-//                    mDatabase.child("users").child(currentUser.getUid()).setValue(user);
+                    mAuth.signOut();
                     finish();
                 }
             }

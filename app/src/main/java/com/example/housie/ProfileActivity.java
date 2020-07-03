@@ -31,8 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText emailText;
     private Button update_btn;
     private Button back_btn;
-    private String oriName;
-    private String oriEmail;
+    private UserProfile userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +42,18 @@ public class ProfileActivity extends AppCompatActivity {
         update_btn = findViewById(R.id.btn_update);
         back_btn = findViewById(R.id.btn_back);
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         currentUser = mAuth.getCurrentUser();
+
         if (currentUser != null) {
-            if (currentUser.getDisplayName() != null && currentUser.getEmail() != null) {
-                nameText.setText(currentUser.getDisplayName());
-                emailText.setText(currentUser.getEmail());
-            }
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child("userProfile").child(currentUser.getUid());
             ValueEventListener userListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    UserProfile user = snapshot.child("users").child(currentUser.getUid()).getValue(User.class);
-//                    if (user != null) {
-//                        Log.d(TAG, "onDataChange: Username:" + user.getName());
-//                    }
+                    userProfile = snapshot.getValue(UserProfile.class);
+                    Log.d(TAG, "onDataChange: name:" + userProfile.getName());
+                    Log.d(TAG, "onDataChange: email:" + userProfile.getEmail());
+                    nameText.setText(userProfile.getName());
+                    emailText.setText(userProfile.getEmail());
                 }
 
                 @Override
@@ -64,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Log.e(TAG, "onCancelled: Could not find User", error.toException());
                 }
             };
-            mDatabase.addValueEventListener(userListener);
+            mDatabase.addListenerForSingleValueEvent(userListener);
 
         }
         update_btn.setOnClickListener(new View.OnClickListener() {
@@ -99,9 +96,10 @@ public class ProfileActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(ProfileActivity.this, "Name Updated", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onComplete: Name Updated to " + currentUser.getDisplayName());
-//                    User user = new User(nameText.getText().toString(), emailText.getText().toString());
-//                    mDatabase.child("users").child(currentUser.getUid()).setValue(user);
+                    Log.d(TAG, "onComplete: Name updated to" + nameText.getText().toString());
+                    userProfile.setName(nameText.getText().toString());
+                    userProfile.setEmail(emailText.getText().toString());
+                    mDatabase.setValue(userProfile);
                     finish();
                 }
             }
