@@ -87,6 +87,13 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
+        friends_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomePageActivity.this, FriendsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onLoginUpdate() {
