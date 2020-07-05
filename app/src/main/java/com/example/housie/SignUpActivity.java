@@ -93,9 +93,10 @@ public class SignUpActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete: Name: " + currentUser.getDisplayName());
                     String uId = currentUser.getUid();
-                    UserProfile userProfile = new UserProfile(uId, nameText.getText().toString(), emailText.getText().toString());
-                    UserFriends userFriends = new UserFriends(uId);
-                    UserRooms userRooms = new UserRooms(uId);
+                    String userName = nameText.getText().toString();
+                    UserProfile userProfile = new UserProfile(uId, userName, emailText.getText().toString());
+                    UserFriends userFriends = new UserFriends(uId, userName);
+                    UserRooms userRooms = new UserRooms(uId, userName);
                     UserGames userGames = new UserGames(uId);
                     Map<String, Object> userMap = new HashMap<>();
                     userMap.put("userProfile/" + uId, userProfile);

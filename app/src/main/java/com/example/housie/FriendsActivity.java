@@ -47,6 +47,9 @@ public class FriendsActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         userIdList = new ArrayList<>();
+        final FriendsAdapter friendsAdapter = new FriendsAdapter(userIdList);
+        recyclerView.setAdapter(friendsAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         Query getFriendListQuery = mDatabase.child("userProfile").limitToFirst(20);
 
         getFriendListQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -62,12 +65,10 @@ public class FriendsActivity extends AppCompatActivity {
                             userProfile.mapToUserProfile(users.get(userId));
                             userIdList.add(userProfile);
                         }
+                        friendsAdapter.notifyDataSetChanged();
 //                        Log.d(TAG, "onDataChange: userProfile "+userProfile.getUserId());
                     }
                 }
-                FriendsAdapter friendsAdapter = new FriendsAdapter(userIdList);
-                recyclerView.setAdapter(friendsAdapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
             }
 
             @Override

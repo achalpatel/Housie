@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class UserRooms {
     public String userId;
+    public String userName;
     public Map<String, Boolean> roomsOwned = new HashMap<>();
     public Map<String, Boolean> roomsHost = new HashMap<>();
 
@@ -17,6 +18,11 @@ public class UserRooms {
 
     public UserRooms(String userId) {
         this.userId = userId;
+    }
+
+    public UserRooms(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
     }
 
     //Getters
@@ -33,6 +39,10 @@ public class UserRooms {
         return roomsHost;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
     //Setters
 
     public void setUserId(String userId) {
@@ -45,6 +55,10 @@ public class UserRooms {
 
     public void setRoomsHost(Map<String, Boolean> roomsHost) {
         this.roomsHost = roomsHost;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     //Methods

@@ -13,4 +13,6 @@
     <string name="createroom">Create Room</string>
     <string name="update">Update</string>
     <string name="back">Back</string>
+    <string name="addfriend">Add Friend</string>
+    <string name="search">Search</string>
 </resources>

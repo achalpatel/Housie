@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class UserFriends {
     public String userId;
+    public String userName;
     public Map<String, Boolean> friendsList = new HashMap<>();
     public Map<String, Boolean> friendRequestSent = new HashMap<>();
     public Map<String, Boolean> friendRequestReceived = new HashMap<>();
@@ -20,10 +21,20 @@ public class UserFriends {
     public UserFriends(String userId) {
         this.userId = userId;
     }
+
+    public UserFriends(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+    }
+
     //Getters
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public Map<String, Boolean> getFriendsList() {
@@ -42,6 +53,10 @@ public class UserFriends {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setFriendsList(Map<String, Boolean> friendsList) {

@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.housie.R;
 import com.example.model.UserProfile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {

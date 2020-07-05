@@ -17,7 +17,8 @@
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:hint="@string/addfriend"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewId"
