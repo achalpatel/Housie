@@ -15,4 +15,6 @@
     <string name="back">Back</string>
     <string name="addfriend">Add Friend</string>
     <string name="search">Search</string>
+    <string name="searchfriend">Search by Email</string>
+    <string name="sendrequest">Send Request</string>
 </resources>
