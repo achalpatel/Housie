@@ -15,6 +15,7 @@ public class UserProfile {
 
     //Constructors
     public UserProfile() {
+        isActive = false;
     }
 
     public UserProfile(String userId) {
@@ -73,7 +74,7 @@ public class UserProfile {
 
     //Methods
     @Exclude
-    public void mapToUserProfile(HashMap map) {
+    public void mapToUserProfile(HashMap<Object, Object> map) {
         this.setName((String) map.get("name"));
         this.setEmail((String) map.get("email"));
         this.setCurrentRoom((String) map.get("currentRoom"));

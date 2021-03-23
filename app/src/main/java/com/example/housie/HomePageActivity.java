@@ -97,7 +97,9 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     public void onLoginUpdate() {
-        userProfileLocal.setIsActive(true);
-        mDatabase.setValue(userProfileLocal);
+        if (userProfileLocal != null){
+            userProfileLocal.setIsActive(true);
+            mDatabase.setValue(userProfileLocal);
+        }
     }
 }
