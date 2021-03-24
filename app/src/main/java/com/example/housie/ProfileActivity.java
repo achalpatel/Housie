@@ -32,6 +32,9 @@ public class ProfileActivity extends AppCompatActivity {
     private Button update_btn;
     private Button back_btn;
     private UserProfile userProfile;
+    private DatabaseReference userFriendsDatabase;
+    private DatabaseReference userRoomsDatabase;
+    private DatabaseReference userProfileDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +46,10 @@ public class ProfileActivity extends AppCompatActivity {
         back_btn = findViewById(R.id.btn_back);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         if (currentUser != null) {
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child("userProfile").child(currentUser.getUid());
-            ValueEventListener userListener = new ValueEventListener() {
+            userProfileDatabase = mDatabase.child("users").child("userProfile").child(currentUser.getUid());
+            userProfileDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     userProfile = snapshot.getValue(UserProfile.class);
@@ -60,9 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, "onCancelled: Could not find User", error.toException());
                 }
-            };
-            mDatabase.addListenerForSingleValueEvent(userListener);
-
+            });
         }
         update_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,12 +83,16 @@ public class ProfileActivity extends AppCompatActivity {
     protected void updateClick() {
         if (nameText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please Enter the Name", Toast.LENGTH_SHORT).show();
+        }else if(emailText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please Enter the Email", Toast.LENGTH_SHORT).show();
         } else {
             this.updateProfile();
         }
     }
 
     public void updateProfile() {
+        userFriendsDatabase = mDatabase.child("users").child("userFriends").child(currentUser.getUid());
+        userRoomsDatabase = mDatabase.child("users").child("userRooms").child(currentUser.getUid());
         UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                 .setDisplayName(nameText.getText().toString())
                 .build();
@@ -99,7 +104,9 @@ public class ProfileActivity extends AppCompatActivity {
                     Log.d(TAG, "onComplete: Name updated to" + nameText.getText().toString());
                     userProfile.setName(nameText.getText().toString());
                     userProfile.setEmail(emailText.getText().toString());
-                    mDatabase.setValue(userProfile);
+                    userFriendsDatabase.child("username").setValue(nameText.getText().toString());
+                    userRoomsDatabase.child("username").setValue(nameText.getText().toString());
+                    userProfileDatabase.setValue(userProfile);
                     finish();
                 }
             }
