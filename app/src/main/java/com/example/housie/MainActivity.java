@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser != null){
             Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
             startActivity(intent);
+            finish();
         }
 
         Log.d(TAG, "onCreate: Login button visibility: " + login_btn.getVisibility());
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

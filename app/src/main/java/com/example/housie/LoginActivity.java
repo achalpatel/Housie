@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser != null) {
             Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
             startActivity(intent);
+            finish();
         }
         btnLogin = findViewById(R.id.btn_login);
         emailTextView = findViewById(R.id.id_email);
@@ -63,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Welcome User", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
                         startActivity(intent);
+                        finish();
                     } else if (task.isCanceled()) {
                         Log.w(TAG, "onComplete: Incorrect credentials", task.getException());
                         Toast.makeText(LoginActivity.this, "Incorrect Credentials", Toast.LENGTH_SHORT).show();

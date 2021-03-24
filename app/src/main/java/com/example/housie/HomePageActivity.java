@@ -84,6 +84,7 @@ public class HomePageActivity extends AppCompatActivity {
                 mDatabase.setValue(userProfileLocal);
                 Intent intent = new Intent(HomePageActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
