@@ -33,13 +33,11 @@ public class HomePageActivity extends AppCompatActivity {
     private Button createroom_btn;
     private Button signout_btn;
     private static final String TAG = "Achal-Homepage";
-    private boolean status;
     private UserProfile userProfileLocal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.status = true;
         setContentView(R.layout.activity_home_page);
         profile_btn = findViewById(R.id.btn_profile);
         friends_btn = findViewById(R.id.btn_friends);
@@ -79,9 +77,9 @@ public class HomePageActivity extends AppCompatActivity {
         signout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signOut();
                 userProfileLocal.setIsActive(false);
                 mDatabase.setValue(userProfileLocal);
+                mAuth.signOut();
                 Intent intent = new Intent(HomePageActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();

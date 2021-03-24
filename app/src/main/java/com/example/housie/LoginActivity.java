@@ -24,7 +24,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailTextView;
     private EditText passwordTextView;
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
     private static final String TAG = "Achal-LoginActivity";
     private FirebaseUser currentUser;
 
