@@ -15,7 +15,6 @@ public class UserProfile {
 
     //Constructors
     public UserProfile() {
-        isActive = false;
     }
 
     public UserProfile(String userId) {
