@@ -48,7 +48,6 @@ public class SignUpActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         currentUser = mAuth.getCurrentUser();
 
-
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,19 +62,27 @@ public class SignUpActivity extends AppCompatActivity {
     protected void submitClick() {
         if (nameText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please Enter the Name", Toast.LENGTH_SHORT).show();
-        } else {
+        }
+        else if(emailText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please Enter the Email", Toast.LENGTH_SHORT).show();
+        }
+        else if(passwordText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please Enter the Password", Toast.LENGTH_SHORT).show();
+        }
+        else {
             mAuth.createUserWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, "onComplete: User Signed Up successfully");
-                                Toast.makeText(SignUpActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUpActivity.this, "Sign-up Success", Toast.LENGTH_SHORT).show();
                                 currentUser = mAuth.getCurrentUser();
                                 updateProfile();
+                                finish();
                             } else {
                                 Log.e(TAG, "onComplete: Sign up failed", task.getException());
-                                Toast.makeText(SignUpActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUpActivity.this, "Sign-up Failed", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -86,7 +93,6 @@ public class SignUpActivity extends AppCompatActivity {
         UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                 .setDisplayName(nameText.getText().toString())
                 .build();
-
         currentUser.updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -105,7 +111,6 @@ public class SignUpActivity extends AppCompatActivity {
                     userMap.put("userGames/" + uId, userGames);
                     mDatabase.child("users").updateChildren(userMap);
                     mAuth.signOut();
-                    finish();
                 }
             }
         });

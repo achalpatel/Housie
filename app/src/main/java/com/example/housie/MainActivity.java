@@ -27,7 +27,13 @@ public class MainActivity extends AppCompatActivity {
         signup_btn = findViewById(R.id.btn_signup);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        checkIfLoggedIn();
+
+//        Jump to HomePage if Logged In
+        if (currentUser != null){
+            Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+            startActivity(intent);
+        }
+
         Log.d(TAG, "onCreate: Login button visibility: " + login_btn.getVisibility());
 
 
@@ -47,13 +53,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void checkIfLoggedIn() {
-        if (currentUser != null) {
-            Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-            startActivity(intent);
-        }
-    }
-
-
 }
