@@ -1,6 +1,7 @@
 package com.example.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.housie.R;
 import com.example.model.UserProfile;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
-
-    private List<UserProfile> mUsers;
-
-    public FriendsAdapter(List<UserProfile> users) {
+    private DatabaseReference mDatabase;
+    private List<String> mUsers;
+    private static final String TAG = "Achal-FriendsAdapater";
+    public FriendsAdapter(List<String> users) {
         this.mUsers = users;
     }
 
@@ -45,13 +51,26 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        UserProfile user = mUsers.get(position);
-        TextView nameTextView = holder.textView;
-        TextView statusTextView = holder.statusView;
-        String userName = user.getName();
-        String status = user.getIsActive().toString();
-        nameTextView.setText(userName);
-        statusTextView.setText(status);
+        mDatabase = FirebaseDatabase.getInstance().getReference()
+                    .child("users")
+                    .child("userProfile");
+        String userId = mUsers.get(position);
+        final ViewHolder holderInner = holder;
+        mDatabase.child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserProfile user = snapshot.getValue(UserProfile.class);
+                updateText(holderInner, user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "onCancelled: Cancelled");
+            }
+        });
+//        String status = user.getIsActive().toString();
+//        nameTextView.setText(userName);
+//        statusTextView.setText(status);
     }
 
     @Override
@@ -59,5 +78,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         return mUsers.size();
     }
 
+    public void updateText(ViewHolder holder, UserProfile userProfile){
+        TextView nameTextView = holder.textView;
+        TextView statusTextView = holder.statusView;
+        nameTextView.setText(userProfile.name);
+        statusTextView.setText(userProfile.isActive.toString());
+    }
 
 }
