@@ -104,8 +104,8 @@ public class ProfileActivity extends AppCompatActivity {
                     Log.d(TAG, "onComplete: Name updated to" + nameText.getText().toString());
                     userProfile.setName(nameText.getText().toString());
                     userProfile.setEmail(emailText.getText().toString());
-                    userFriendsDatabase.child("username").setValue(nameText.getText().toString());
-                    userRoomsDatabase.child("username").setValue(nameText.getText().toString());
+                    userFriendsDatabase.child("userName").setValue(nameText.getText().toString());
+                    userRoomsDatabase.child("userName").setValue(nameText.getText().toString());
                     userProfileDatabase.setValue(userProfile);
                     finish();
                 }

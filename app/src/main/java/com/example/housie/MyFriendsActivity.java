@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 
@@ -48,7 +49,9 @@ public class MyFriendsActivity extends AppCompatActivity {
         final FriendsAdapter friendsAdapter = new FriendsAdapter(userIdList);
         recyclerView.setAdapter(friendsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        Query getFriendListQuery = mDatabase.child("userProfile").limitToFirst(20);
+        Query getFriendListQuery = mDatabase.child("userFriends")
+                .child(currentUser.getUid()).child("friendsList")
+                .limitToFirst(20);
 
         getFriendListQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -71,7 +74,7 @@ public class MyFriendsActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.e(TAG, "onCancelled: No Friends");
             }
         });
 
