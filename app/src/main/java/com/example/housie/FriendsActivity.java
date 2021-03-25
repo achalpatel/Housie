@@ -1,81 +1,39 @@
 package com.example.housie;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 
-
-import com.example.adapter.FriendsAdapter;
-import com.example.model.UserProfile;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class FriendsActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    private FirebaseUser currentUser;
-    private TextView textView;
-    private TextView statusTextView;
+    private Button btnMyFriends;
+    private Button btnFriendRequests;
     private static final String TAG = "Achal-FriendsActivity";
-    private HashMap<String, HashMap> users;
-    private RecyclerView recyclerView;
-    private List<UserProfile> userIdList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewId);
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-        userIdList = new ArrayList<>();
-        final FriendsAdapter friendsAdapter = new FriendsAdapter(userIdList);
-        recyclerView.setAdapter(friendsAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        Query getFriendListQuery = mDatabase.child("userProfile").limitToFirst(20);
+        btnMyFriends = findViewById(R.id.btn_myFriends);
+        btnFriendRequests = findViewById(R.id.btn_friendRequests);
 
-        getFriendListQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+        btnMyFriends.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Object userObj = snapshot.getValue();
-                snapshot.getChildren();
-                users = (HashMap<String, HashMap>) userObj;
-                if(users!=null){
-                    for(String userId : users.keySet()){
-                        UserProfile userProfile = new UserProfile(userId);
-                        if(users.containsKey(userId) && users.get(userId)!=null){
-                            userProfile.mapToUserProfile(users.get(userId));
-                            userIdList.add(userProfile);
-                        }
-                        friendsAdapter.notifyDataSetChanged();
-//                        Log.d(TAG, "onDataChange: userProfile "+userProfile.getUserId());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View v) {
+                Intent intent = new Intent(FriendsActivity.this, MyFriendsActivity.class);
+                startActivity(intent);
             }
         });
 
+        btnFriendRequests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(FriendsActivity.this, );
+//                startActivity(intent);
+            }
+        });
     }
 }

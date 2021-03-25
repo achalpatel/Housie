@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.model.UserProfile;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -19,9 +17,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class HomePageActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -78,7 +73,7 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 userProfileLocal.setIsActive(false);
-                mDatabase.setValue(userProfileLocal);
+                mDatabase.child("isActive").setValue(false);
                 mAuth.signOut();
                 Intent intent = new Intent(HomePageActivity.this, MainActivity.class);
                 startActivity(intent);
