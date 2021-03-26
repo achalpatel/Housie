@@ -72,7 +72,6 @@ public class HomePageActivity extends AppCompatActivity {
         signout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userProfileLocal.setIsActive(false);
                 mDatabase.child("isActive").setValue(false);
                 mAuth.signOut();
                 Intent intent = new Intent(HomePageActivity.this, MainActivity.class);

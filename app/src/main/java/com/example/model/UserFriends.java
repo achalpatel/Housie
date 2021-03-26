@@ -2,15 +2,17 @@ package com.example.model;
 
 import com.google.firebase.database.Exclude;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+
 
 public class UserFriends {
     public String userId;
     public String userName;
-    public Set<String> friendsList = new HashSet<>();
-    public Set<String> friendRequestSent = new HashSet<>();
-    public Set<String> friendRequestReceived = new HashSet<>();
+    public List<String> friendsList = new ArrayList<>();
+    public List<String> friendRequestSent = new ArrayList<>();
+    public List<String> friendRequestReceived = new ArrayList<>();
 
 
     //Constructors
@@ -28,7 +30,6 @@ public class UserFriends {
     }
 
     //Getters
-
     public String getUserId() {
         return userId;
     }
@@ -37,15 +38,15 @@ public class UserFriends {
         return userName;
     }
 
-    public Set<String> getFriendsList() {
+    public List<String> getFriendsList() {
         return friendsList;
     }
 
-    public Set<String> getFriendRequestSent() {
+    public List<String> getFriendRequestSent() {
         return friendRequestSent;
     }
 
-    public Set<String> getFriendRequestReceived() {
+    public List<String> getFriendRequestReceived() {
         return friendRequestReceived;
     }
 
@@ -59,15 +60,15 @@ public class UserFriends {
         this.userName = userName;
     }
 
-    public void setFriendsList(Set<String> friendsList) {
+    public void setFriendsList(List<String> friendsList) {
         this.friendsList = friendsList;
     }
 
-    public void setFriendRequestSent(Set<String> friendRequestSent) {
+    public void setFriendRequestSent(List<String> friendRequestSent) {
         this.friendRequestSent = friendRequestSent;
     }
 
-    public void setFriendRequestReceived(Set<String> friendRequestReceived) {
+    public void setFriendRequestReceived(List<String> friendRequestReceived) {
         this.friendRequestReceived = friendRequestReceived;
     }
 

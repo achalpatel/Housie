@@ -45,7 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.id_password);
         submit_btn = findViewById(R.id.btn_submit);
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         currentUser = mAuth.getCurrentUser();
 
         submit_btn.setOnClickListener(new View.OnClickListener() {
@@ -104,13 +104,14 @@ public class SignUpActivity extends AppCompatActivity {
                     UserFriends userFriends = new UserFriends(uId, userName);
                     UserRooms userRooms = new UserRooms(uId, userName);
                     UserGames userGames = new UserGames(uId);
-                    Map<String, Object> userMap = new HashMap<>();
-                    userMap.put("userProfile/" + uId, userProfile);
-                    userMap.put("userFriends/" + uId, userFriends);
-                    userMap.put("userRooms/" + uId, userRooms);
-                    userMap.put("userGames/" + uId, userGames);
-                    mDatabase.child("users").updateChildren(userMap);
+                    mDatabase.child("userProfile").child(uId).setValue(userProfile);
+                    mDatabase.child("userFriends").child(uId).setValue(userFriends);
+                    mDatabase.child("userRooms").child(uId).setValue(userRooms);
+                    mDatabase.child("userGames").child(uId).setValue(userGames);
                     mAuth.signOut();
+                }
+                if(task.isCanceled()){
+                    Log.e(TAG, "onComplete: "+task.getException());
                 }
             }
         });
