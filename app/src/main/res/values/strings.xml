@@ -19,4 +19,5 @@
     <string name="sendrequest">Send Request</string>
     <string name="myfriends">My Friends</string>
     <string name="friendrequests">Friend Requests</string>
+    <string name="searchpeople">Search People</string>
 </resources>
