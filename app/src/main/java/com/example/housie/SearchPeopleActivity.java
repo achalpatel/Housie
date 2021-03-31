@@ -53,6 +53,7 @@ public class SearchPeopleActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<Map<String, UserProfile>> t = new GenericTypeIndicator<Map<String, UserProfile>>() {};
                 Map<String, UserProfile> mapOfProfile = snapshot.getValue(t);
+                mapOfProfile.remove(currentUser.getUid());
                 List<UserProfile> tempProfileList = new ArrayList<>(mapOfProfile.values());
                 userProfiles.addAll(tempProfileList);
                 searchPeopleAdapter.notifyDataSetChanged();
