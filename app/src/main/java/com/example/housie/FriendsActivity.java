@@ -41,8 +41,8 @@ public class FriendsActivity extends AppCompatActivity {
         btnFriendRequests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(FriendsActivity.this, );
-//                startActivity(intent);
+                Intent intent = new Intent(FriendsActivity.this, CheckFriendReqActivity.class);
+                startActivity(intent);
             }
         });
     }
