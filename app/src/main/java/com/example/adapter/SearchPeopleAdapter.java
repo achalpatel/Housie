@@ -33,14 +33,15 @@ import java.util.Map;
 
 public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapter.ViewHolder> {
     private static final String TAG = "Achal-SearchPeopleAda";
-    private List<UserProfile> userResult;
+    private List<String> userResult;
     private DatabaseReference mDatabase;
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
     private String userId;
     private UserFriends currentUserFriends;
+    private UserFriends positionUserFriends;
 
-    public SearchPeopleAdapter(List<UserProfile> userResult){
+    public SearchPeopleAdapter(List<String> userResult){
         this.userResult = userResult;
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -81,11 +82,21 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TextView nameTextView = holder.nameView;
+        final TextView nameTextView = holder.nameView;
         final Button requestButton = holder.btnRequest;
-        UserProfile user = userResult.get(position);
-        userId = user.userId;
-        nameTextView.setText(user.name);
+        userId = userResult.get(position);
+        mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                nameTextView.setText(snapshot.getValue(UserFriends.class).userName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         if(currentUserFriends.checkFriendReqSent(userId)){
             requestButton.setEnabled(false);
             requestButton.setText("Sent");
@@ -94,15 +105,15 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
             @Override
             public void onClick(View v) {
                 requestButton.setEnabled(false);
-                currentUserFriends.addToFriendReqSent(userId);
                 mDatabase.child(currentUser.getUid()).runTransaction(new Transaction.Handler() {
                     @NonNull
                     @Override
                     public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                        UserFriends tempUser = currentData.getValue(UserFriends.class);
-                        if(tempUser==null){
+                        currentUserFriends = currentData.getValue(UserFriends.class);
+                        if(currentUserFriends==null){
                             return Transaction.success(currentData);
                         }
+                        currentUserFriends.addToFriendReqSent(userId);
                         currentData.setValue(currentUserFriends);
                         return Transaction.success(currentData);
                     }
@@ -114,12 +125,12 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
                             @NonNull
                             @Override
                             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                                UserFriends tempUser = currentData.getValue(UserFriends.class);
-                                if(tempUser==null){
+                                positionUserFriends = currentData.getValue(UserFriends.class);
+                                if(positionUserFriends==null){
                                     return Transaction.success(currentData);
                                 }
-                                tempUser.addToFriendReqReceived(currentUser.getUid());
-                                currentData.setValue(tempUser);
+                                positionUserFriends.addToFriendReqReceived(currentUser.getUid());
+                                currentData.setValue(positionUserFriends);
                                 return Transaction.success(currentData);
                             }
 
