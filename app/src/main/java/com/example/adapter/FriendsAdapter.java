@@ -24,6 +24,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private DatabaseReference mDatabase;
     private List<String> mUsers;
     private static final String TAG = "Achal-FriendsAdapater";
+
     public FriendsAdapter(List<String> users) {
         this.mUsers = users;
     }
@@ -45,15 +46,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View friendsView = inflater.inflate(R.layout.friends_layout, parent, false);
-        ViewHolder viewHolder = new ViewHolder(friendsView);
-        return viewHolder;
+        return new ViewHolder(friendsView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         mDatabase = FirebaseDatabase.getInstance().getReference()
-                    .child("users")
-                    .child("userProfile");
+                .child("users")
+                .child("userProfile");
         String userId = mUsers.get(position);
         final ViewHolder holderInner = holder;
         mDatabase.child(userId).addValueEventListener(new ValueEventListener() {
@@ -78,7 +78,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         return mUsers.size();
     }
 
-    public void updateText(ViewHolder holder, UserProfile userProfile){
+    public void updateText(ViewHolder holder, UserProfile userProfile) {
         TextView nameTextView = holder.textView;
         TextView statusTextView = holder.statusView;
         nameTextView.setText(userProfile.name);

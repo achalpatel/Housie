@@ -83,7 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void updateClick() {
         if (nameText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please Enter the Name", Toast.LENGTH_SHORT).show();
-        }else if(emailText.getText().toString().isEmpty()) {
+        } else if (emailText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please Enter the Email", Toast.LENGTH_SHORT).show();
         } else {
             this.updateProfile();

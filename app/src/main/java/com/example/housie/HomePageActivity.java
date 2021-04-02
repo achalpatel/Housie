@@ -90,7 +90,7 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     public void onLoginUpdate() {
-        if (userProfileLocal != null){
+        if (userProfileLocal != null) {
             userProfileLocal.setIsActive(true);
             mDatabase.setValue(userProfileLocal);
         }

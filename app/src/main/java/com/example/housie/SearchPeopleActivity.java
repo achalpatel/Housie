@@ -60,7 +60,7 @@ public class SearchPeopleActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e(TAG, "onCancelled: Cannot fetch currentUserFriends"+error);
+                        Log.e(TAG, "onCancelled: Cannot fetch currentUserFriends" + error);
                     }
                 });
 
@@ -69,7 +69,8 @@ public class SearchPeopleActivity extends AppCompatActivity {
         getPeopleQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GenericTypeIndicator<Map<String, UserProfile>> t = new GenericTypeIndicator<Map<String, UserProfile>>() {};
+                GenericTypeIndicator<Map<String, UserProfile>> t = new GenericTypeIndicator<Map<String, UserProfile>>() {
+                };
                 Map<String, UserProfile> mapOfProfile = snapshot.getValue(t);
                 mapOfProfile.remove(currentUser.getUid());
                 Set<String> tempProfileSet = new HashSet<>(mapOfProfile.keySet());

@@ -36,7 +36,7 @@ public class CheckFriendReqAdapter extends RecyclerView.Adapter<CheckFriendReqAd
     private List<String> userReqResult;
     private UserFriends currentUserFriends;
 
-    public CheckFriendReqAdapter(List<String> userReqResult){
+    public CheckFriendReqAdapter(List<String> userReqResult) {
         this.userReqResult = userReqResult;
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -55,12 +55,12 @@ public class CheckFriendReqAdapter extends RecyclerView.Adapter<CheckFriendReqAd
         });
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameView;
         public Button btnAccept;
         public Button btnReject;
 
-        public ViewHolder(@NonNull View itemView){
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameView = itemView.findViewById(R.id.user_text);
             btnAccept = itemView.findViewById(R.id.btn_acceptReq);

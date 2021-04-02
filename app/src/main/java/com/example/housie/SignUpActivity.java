@@ -62,14 +62,11 @@ public class SignUpActivity extends AppCompatActivity {
     protected void submitClick() {
         if (nameText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please Enter the Name", Toast.LENGTH_SHORT).show();
-        }
-        else if(emailText.getText().toString().isEmpty()){
+        } else if (emailText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please Enter the Email", Toast.LENGTH_SHORT).show();
-        }
-        else if(passwordText.getText().toString().isEmpty()){
+        } else if (passwordText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please Enter the Password", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             mAuth.createUserWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -110,8 +107,8 @@ public class SignUpActivity extends AppCompatActivity {
                     mDatabase.child("userGames").child(uId).setValue(userGames);
                     mAuth.signOut();
                 }
-                if(task.isCanceled()){
-                    Log.e(TAG, "onComplete: "+task.getException());
+                if (task.isCanceled()) {
+                    Log.e(TAG, "onComplete: " + task.getException());
                 }
             }
         });

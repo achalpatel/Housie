@@ -58,13 +58,14 @@ public class MyFriendsActivity extends AppCompatActivity {
         getFriendListQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GenericTypeIndicator<Set<String>> t = new GenericTypeIndicator<Set<String>>() {};
+                GenericTypeIndicator<Set<String>> t = new GenericTypeIndicator<Set<String>>() {
+                };
                 Set<String> friends = snapshot.getValue(t);
-                if (friends!=null){
-                     for (String userId : friends){
-                         userIdList.add(userId);
-                     }
-                     friendsAdapter.notifyDataSetChanged();
+                if (friends != null) {
+                    for (String userId : friends) {
+                        userIdList.add(userId);
+                    }
+                    friendsAdapter.notifyDataSetChanged();
                     Log.d(TAG, "onDataChange: Friends Data Updated");
                 }
 //                Object userObj = snapshot.getValue();

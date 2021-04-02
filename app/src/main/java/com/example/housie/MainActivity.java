@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
 
 //        Jump to HomePage if Logged In
-        if (currentUser != null){
+        if (currentUser != null) {
             Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
             startActivity(intent);
             finish();

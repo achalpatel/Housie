@@ -37,10 +37,10 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
     private DatabaseReference mDatabase;
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
-//    private String userId;
+    //    private String userId;
     private UserFriends currentUserFriends;
 
-    public SearchPeopleAdapter(List<String> userResult){
+    public SearchPeopleAdapter(List<String> userResult) {
         this.userResult = userResult;
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -59,11 +59,11 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
         });
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameView;
         public Button btnRequest;
 
-        public ViewHolder(@NonNull View itemView){
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameView = itemView.findViewById(R.id.user_text);
             btnRequest = itemView.findViewById(R.id.btn_sendRequest);
@@ -84,7 +84,7 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
         final TextView nameTextView = holder.nameView;
         final Button requestButton = holder.btnRequest;
         final String userId = userResult.get(position);
-        Log.d(TAG, "onBindViewHolder: UserId:"+userId);
+        Log.d(TAG, "onBindViewHolder: UserId:" + userId);
         mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -98,7 +98,7 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
             }
         });
 
-        if(currentUserFriends.checkFriendReqSent(userId)){
+        if (currentUserFriends.checkFriendReqSent(userId)) {
             requestButton.setEnabled(false);
             requestButton.setText("Sent");
         }
@@ -111,7 +111,7 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
                     @Override
                     public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                         currentUserFriends = currentData.getValue(UserFriends.class);
-                        if(currentUserFriends==null){
+                        if (currentUserFriends == null) {
                             return Transaction.success(currentData);
                         }
                         currentUserFriends.addToFriendReqSent(userId);
@@ -127,7 +127,7 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
                             @Override
                             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                                 UserFriends temp = currentData.getValue(UserFriends.class);
-                                if(temp==null){
+                                if (temp == null) {
                                     return Transaction.success(currentData);
                                 }
                                 temp.addToFriendReqReceived(currentUser.getUid());

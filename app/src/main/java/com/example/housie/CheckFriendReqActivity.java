@@ -51,9 +51,10 @@ public class CheckFriendReqActivity extends AppCompatActivity {
         getPeopleQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {
+                };
                 List<String> userRequests = snapshot.getValue(t);
-                if(userRequests!=null){
+                if (userRequests != null) {
                     userReqResult.addAll(userRequests);
                     checkFriendReqAdapter.notifyDataSetChanged();
                     Log.d(TAG, "onDataChange: UserReqResults Added");
@@ -62,7 +63,7 @@ public class CheckFriendReqActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "onCancelled: UserReqResults Error"+error);
+                Log.e(TAG, "onCancelled: UserReqResults Error" + error);
             }
         });
     }
