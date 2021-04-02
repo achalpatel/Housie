@@ -37,9 +37,8 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
     private DatabaseReference mDatabase;
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
-    private String userId;
+//    private String userId;
     private UserFriends currentUserFriends;
-    private UserFriends positionUserFriends;
 
     public SearchPeopleAdapter(List<String> userResult){
         this.userResult = userResult;
@@ -84,11 +83,13 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final TextView nameTextView = holder.nameView;
         final Button requestButton = holder.btnRequest;
-        userId = userResult.get(position);
+        final String userId = userResult.get(position);
+        Log.d(TAG, "onBindViewHolder: UserId:"+userId);
         mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                nameTextView.setText(snapshot.getValue(UserFriends.class).userName);
+                UserFriends temp = snapshot.getValue(UserFriends.class);
+                nameTextView.setText(temp.userName);
             }
 
             @Override
@@ -125,12 +126,12 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleAdapte
                             @NonNull
                             @Override
                             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                                positionUserFriends = currentData.getValue(UserFriends.class);
-                                if(positionUserFriends==null){
+                                UserFriends temp = currentData.getValue(UserFriends.class);
+                                if(temp==null){
                                     return Transaction.success(currentData);
                                 }
-                                positionUserFriends.addToFriendReqReceived(currentUser.getUid());
-                                currentData.setValue(positionUserFriends);
+                                temp.addToFriendReqReceived(currentUser.getUid());
+                                currentData.setValue(temp);
                                 return Transaction.success(currentData);
                             }
 
