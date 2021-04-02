@@ -35,8 +35,6 @@ public class CheckFriendReqAdapter extends RecyclerView.Adapter<CheckFriendReqAd
     private FirebaseAuth mAuth;
     private List<String> userReqResult;
     private UserFriends currentUserFriends;
-    private UserFriends positionUserFriend;
-    private String userId;
 
     public CheckFriendReqAdapter(List<String> userReqResult){
         this.userReqResult = userReqResult;
@@ -84,18 +82,18 @@ public class CheckFriendReqAdapter extends RecyclerView.Adapter<CheckFriendReqAd
         final TextView nameTextView = holder.nameView;
         final Button acceptButton = holder.btnAccept;
         final Button rejectButton = holder.btnReject;
-        userId = userReqResult.get(position);
+        final String userId = userReqResult.get(position);
         mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                positionUserFriend = snapshot.getValue(UserFriends.class);
+                UserFriends positionUserFriend = snapshot.getValue(UserFriends.class);
                 nameTextView.setText(positionUserFriend.userName);
                 Log.d(TAG, "onDataChange: PositionFriend loaded");
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "onCancelled: PositionFriend failed to load"+error);
+                Log.e(TAG, "onCancelled: PositionFriend failed to load" + error);
             }
         });
 
@@ -106,58 +104,44 @@ public class CheckFriendReqAdapter extends RecyclerView.Adapter<CheckFriendReqAd
                 rejectButton.setEnabled(false);
 
                 currentUserFriends.removeFriendReqReceived(userId);
-                positionUserFriend.removeFriendReqSent(currentUser.getUid());
-
                 currentUserFriends.addToFriendList(userId);
-                positionUserFriend.addToFriendList(currentUser.getUid());
 
-                performTransaction(currentUser.getUid(), userId, currentUserFriends, positionUserFriend, acceptButton, "Accepted");
-//                mDatabase.child(currentUser.getUid()).runTransaction(new Transaction.Handler() {
-//                    @NonNull
-//                    @Override
-//                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-//                        if(currentData.getValue(UserFriends.class) == null){
-//                            return Transaction.success(currentData);
-//                        }
-//                        currentData.setValue(currentUserFriends);
-//                        return Transaction.success(currentData);
-//                    }
-//
-//                    @Override
-//                    public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-//                        mDatabase.child(userId).runTransaction(new Transaction.Handler() {
-//                            @NonNull
-//                            @Override
-//                            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-//                                if(currentData.getValue(UserFriends.class)==null){
-//                                    return Transaction.success(currentData);
-//                                }
-//                                currentData.setValue(positionUserFriend);
-//                                return Transaction.success(currentData);
-//                            }
-//
-//                            @Override
-//                            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-//                                Log.d(TAG, "onComplete: Request Acceptied");
-//                                acceptButton.setText("Accepted");
-//                            }
-//                        });
-//                    }
-//                });
-//                mDatabase.child(currentUser.getUid()).setValue(currentUserFriends)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                Log.d(TAG, "onComplete: FriendReqRec removed");
-//                            }
-//                        });
-//                mDatabase.child(userId).setValue(positionUserFriend)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                Log.d(TAG, "onComplete: FriendReqSent removed");
-//                            }
-//                        });
+                mDatabase.child(currentUser.getUid()).runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                        if (currentData.getValue(UserFriends.class) == null) {
+                            return Transaction.success(currentData);
+                        }
+                        currentData.setValue(currentUserFriends);
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                        mDatabase.child(userId).runTransaction(new Transaction.Handler() {
+                            @NonNull
+                            @Override
+                            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                                UserFriends positionUserFriend = currentData.getValue(UserFriends.class);
+                                if (positionUserFriend == null) {
+                                    return Transaction.success(currentData);
+                                }
+                                positionUserFriend.removeFriendReqSent(currentUser.getUid());
+                                positionUserFriend.addToFriendList(currentUser.getUid());
+                                currentData.setValue(positionUserFriend);
+                                return Transaction.success(currentData);
+                            }
+
+                            @Override
+                            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                                Log.d(TAG, "onComplete: Request Acceptied");
+                                acceptButton.setText("Accepted");
+                                rejectButton.setText("Accepted");
+                            }
+                        });
+                    }
+                });
             }
         });
 
@@ -168,57 +152,40 @@ public class CheckFriendReqAdapter extends RecyclerView.Adapter<CheckFriendReqAd
                 rejectButton.setEnabled(false);
 
                 currentUserFriends.removeFriendReqReceived(userId);
-                positionUserFriend.removeFriendReqSent(currentUser.getUid());
 
-                performTransaction(currentUser.getUid(), userId, currentUserFriends, positionUserFriend, rejectButton, "Rejected");
-//                mDatabase.child(currentUser.getUid()).setValue(currentUserFriends)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                Log.d(TAG, "onComplete: FriendReqRec removed");
-//                            }
-//                        });
-//                mDatabase.child(userId).setValue(positionUserFriend)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                Log.d(TAG, "onComplete: FriendReqSent removed");
-//                            }
-//                        });
-//                rejectButton.setText("Rejected");
-            }
-        });
-    }
-
-    public void performTransaction(String uId1, final String uId2, final UserFriends userFriends1, final UserFriends userFriends2, final Button btn, final String onCompleteText){
-        mDatabase.child(uId1).runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                if(currentData.getValue(UserFriends.class) == null){
-                    return Transaction.success(currentData);
-                }
-                currentData.setValue(userFriends1);
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                mDatabase.child(uId2).runTransaction(new Transaction.Handler() {
+                mDatabase.child(currentUser.getUid()).runTransaction(new Transaction.Handler() {
                     @NonNull
                     @Override
                     public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                        if(currentData.getValue(UserFriends.class)==null){
+                        if (currentData.getValue(UserFriends.class) == null) {
                             return Transaction.success(currentData);
                         }
-                        currentData.setValue(userFriends2);
+                        currentData.setValue(currentUserFriends);
                         return Transaction.success(currentData);
                     }
 
                     @Override
                     public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                        Log.d(TAG, "onComplete: Request Acceptied");
-                        btn.setText(onCompleteText);
+                        mDatabase.child(userId).runTransaction(new Transaction.Handler() {
+                            @NonNull
+                            @Override
+                            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                                UserFriends positionUserFriend = currentData.getValue(UserFriends.class);
+                                if (positionUserFriend == null) {
+                                    return Transaction.success(currentData);
+                                }
+                                positionUserFriend.removeFriendReqSent(currentUser.getUid());
+                                currentData.setValue(positionUserFriend);
+                                return Transaction.success(currentData);
+                            }
+
+                            @Override
+                            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                                Log.d(TAG, "onComplete: Request Rejected");
+                                rejectButton.setText("Rejected");
+                                acceptButton.setText("Rejected");
+                            }
+                        });
                     }
                 });
             }
