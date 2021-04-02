@@ -10,8 +10,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 
-import com.example.adapter.FriendsAdapter;
-import com.example.model.UserProfile;
+import com.example.adapter.MyFriendsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,26 +28,23 @@ import java.util.Set;
 
 
 public class MyFriendsActivity extends AppCompatActivity {
+    private static final String TAG = "Achal-MyFriendsActivity";
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private FirebaseUser currentUser;
-    private TextView textView;
-    private TextView statusTextView;
-    private static final String TAG = "Achal-MyFriendsActivity";
-    private HashMap<String, HashMap> users;
     private RecyclerView recyclerView;
-    private List<String> userIdList;
+    private List<String> friendsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myfriends);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewId);
+        recyclerView = findViewById(R.id.recyclerViewId);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-        userIdList = new ArrayList<>();
-        final FriendsAdapter friendsAdapter = new FriendsAdapter(userIdList);
+        friendsList = new ArrayList<>();
+        final MyFriendsAdapter friendsAdapter = new MyFriendsAdapter(friendsList);
         recyclerView.setAdapter(friendsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         Query getFriendListQuery = mDatabase.child("userFriends")
@@ -58,30 +54,10 @@ public class MyFriendsActivity extends AppCompatActivity {
         getFriendListQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GenericTypeIndicator<Set<String>> t = new GenericTypeIndicator<Set<String>>() {
+                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {
                 };
-                Set<String> friends = snapshot.getValue(t);
-                if (friends != null) {
-                    for (String userId : friends) {
-                        userIdList.add(userId);
-                    }
-                    friendsAdapter.notifyDataSetChanged();
-                    Log.d(TAG, "onDataChange: Friends Data Updated");
-                }
-//                Object userObj = snapshot.getValue();
-//                snapshot.getChildren();
-//                users = (HashMap<String, HashMap>) userObj;
-//                if(users!=null){
-//                    for(String userId : users.keySet()){
-//                        UserProfile userProfile = new UserProfile(userId);
-//                        if(users.containsKey(userId) && users.get(userId)!=null){
-//                            userProfile.mapToUserProfile(users.get(userId));
-//                            userIdList.add(userProfile);
-//                        }
-//                        friendsAdapter.notifyDataSetChanged();
-////                        Log.d(TAG, "onDataChange: userProfile "+userProfile.getUserId());
-//                    }
-//                }
+                friendsList.addAll(snapshot.getValue(t));
+                friendsAdapter.notifyDataSetChanged();
             }
 
             @Override
