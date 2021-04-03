@@ -56,7 +56,10 @@ public class MyFriendsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {
                 };
-                friendsList.addAll(snapshot.getValue(t));
+                List<String> users = snapshot.getValue(t);
+                if(users!=null){
+                    friendsList.addAll(users);
+                }
                 friendsAdapter.notifyDataSetChanged();
             }
 
