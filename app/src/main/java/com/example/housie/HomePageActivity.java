@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.model.UserProfile;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -19,9 +17,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class HomePageActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -33,13 +28,11 @@ public class HomePageActivity extends AppCompatActivity {
     private Button createroom_btn;
     private Button signout_btn;
     private static final String TAG = "Achal-Homepage";
-    private boolean status;
     private UserProfile userProfileLocal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.status = true;
         setContentView(R.layout.activity_home_page);
         profile_btn = findViewById(R.id.btn_profile);
         friends_btn = findViewById(R.id.btn_friends);
@@ -79,11 +72,11 @@ public class HomePageActivity extends AppCompatActivity {
         signout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDatabase.child("isActive").setValue(false);
                 mAuth.signOut();
-                userProfileLocal.setIsActive(false);
-                mDatabase.setValue(userProfileLocal);
                 Intent intent = new Intent(HomePageActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -97,7 +90,7 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     public void onLoginUpdate() {
-        if (userProfileLocal != null){
+        if (userProfileLocal != null) {
             userProfileLocal.setIsActive(true);
             mDatabase.setValue(userProfileLocal);
         }
